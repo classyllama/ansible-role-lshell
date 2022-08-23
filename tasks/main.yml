@@ -9,7 +9,7 @@
     repo: "{{ classyllama_lshell_repo_url }}"
     dest: "/root/lshell-{{ classyllama_lshell_version }}"
     version: "{{ classyllama_lshell_version }} "
-  when: is_lshell_installed.stat.exists is not defined
+  when: not is_lshell_installed.stat.exists
 
 - name: LSHELL | Check if python2 installed on CentOS 8 / RockyLinux8
   ansible.builtin.package:
@@ -25,7 +25,7 @@
   args:
     chdir: "/root/lshell-{{ classyllama_lshell_version }}"
   ignore_errors: '{{ ansible_check_mode }}'
-  when: is_lshell_installed.stat.exists is not defined
+  when: not is_lshell_installed.stat.exists
 
 - name: LSHELL | Add to /etc/shells
   ansible.builtin.lineinfile:
