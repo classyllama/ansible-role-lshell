@@ -10,6 +10,7 @@
     cmd: python setup.py install --no-compile --install-scripts=/usr/bin/
   args:
     chdir: "/root/lshell-{{ classyllama_lshell_version }}"
+  ignore_errors: '{{ ansible_check_mode }}'
 
 - name: LSHELL | Add to /etc/shells
   ansible.builtin.lineinfile:
