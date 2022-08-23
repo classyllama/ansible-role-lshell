@@ -4,7 +4,7 @@ This role provides 'limited shell / lshell' (https://github.com/ghantoos/lshell)
 
 ## Requirements
 
-None
+This tool requires Python2, which is installed on CentOS 8 / RockyLinux 8 as a dependency by this role.
 
 ## Role Variables
 
