@@ -5,9 +5,23 @@
     dest: "/root/lshell-{{ classyllama_lshell_version }}"
     version: "{{ classyllama_lshell_version }} "
 
+- name: LSHELL | Get python version
+  ansible.builtin.set_fact:
+    classyllama_lshell_python: "/usr/bin/python"
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version|int == 7
+
+- name: LSHELL | Get python version
+  ansible.builtin.set_fact:
+    classyllama_lshell_python: "/usr/bin/python3"
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version|int >= 8
+
 - name: LSHELL | Installation
   ansible.builtin.command:
-    cmd: python setup.py install --no-compile --install-scripts=/usr/bin/
+    cmd: "{{ classyllama_lshell_python }} setup.py install --no-compile --install-scripts=/usr/bin/"
   args:
     chdir: "/root/lshell-{{ classyllama_lshell_version }}"
   ignore_errors: '{{ ansible_check_mode }}'
@@ -17,10 +31,18 @@
     path: /etc/shells
     line: /usr/bin/lshell
 
-- name: LSHELL | Upload configuration file
+- name: LSHELL | Prepare configuration
   ansible.builtin.template:
     src: lshell.conf.j2
-    dest: "/etc/lshell.conf"
+    dest: /etc/lshell.conf
+    owner: root
+    group: root
+    mode: 0640
+
+- name: LSHELL | Configure logrotate
+  ansible.builtin.copy:
+    src: lshell
+    dest: /etc/logrotate.d/lshell
     owner: root
     group: root
     mode: 0640
