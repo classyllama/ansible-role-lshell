@@ -37,7 +37,7 @@ logfilename     : %y%m%d-%u
 ##  will allow users to execute code (e.g. /bin/sh) from within the application,
 ##  thus easily escaping lshell. See variable 'path_noexec' to use an alternative
 ##  path to library.
-allowed         : ["{{ classyllama_lshell_allowed_cmd }}"]
+allowed         : [ {{ classyllama_lshell_allowed_cmd }} ]
 
 ##  A list of the allowed commands that are permitted to execute other
 ##  programs (e.g. shell scripts with exec(3)). Setting this variable to 'all'
@@ -132,3 +132,7 @@ history_file     : "/home/%u/.lshell_history"
 
 ##  define the script to run at user login
 #login_script     : "/path/to/myscript.sh"
+
+## disable user exit, this could be useful when lshell is spawned from another
+## none-restricted shell (e.g. bash)
+disable_exit      : 1

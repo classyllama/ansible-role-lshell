@@ -1,5 +1,4 @@
 /var/log/lshell/*.log {
-    su root root
     rotate 364
     daily
     compress
