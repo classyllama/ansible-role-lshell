@@ -1,0 +1,22 @@
+---
+- name: LSHELL | Clone repository
+  ansible.builtin.git:
+    repo: "{{ classyllama_lshell_repo_url }}"
+    dest: "/root/lshell-{{ classyllama_lshell_version }}"
+    version: "{{ classyllama_lshell_version }} "
+
+- name: LSHELL | Prepare build directory
+  ansible.builtin.file:
+    dest: "{{ classyllama_lshell_build_dir }}"
+    owner: root
+    group: root
+    mode: "750"
+    state: "directory"
+
+- name: LSHELL | Upload configuration file
+  ansible.builtin.template:
+    src: lshell.conf.j2
+    dest: "/etc/lshell.conf"
+    owner: root
+    group: root
+    mode: 0640
