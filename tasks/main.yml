@@ -1,9 +1,15 @@
 ---
+- name: LSHELL | Check is installed
+  ansible.builtin.stat:
+    path: /usr/bin/lshell
+  register: is_lshell_installed
+
 - name: LSHELL | Clone the repository
   ansible.builtin.git:
     repo: "{{ classyllama_lshell_repo_url }}"
     dest: "/root/lshell-{{ classyllama_lshell_version }}"
     version: "{{ classyllama_lshell_version }} "
+  when: is_lshell_installed.stat.exists is not defined
 
 - name: LSHELL | Get python version
   ansible.builtin.set_fact:
@@ -25,6 +31,7 @@
   args:
     chdir: "/root/lshell-{{ classyllama_lshell_version }}"
   ignore_errors: '{{ ansible_check_mode }}'
+  when: is_lshell_installed.stat.exists is not defined
 
 - name: LSHELL | Add to /etc/shells
   ansible.builtin.lineinfile:
