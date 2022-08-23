@@ -1,17 +1,20 @@
 ---
-- name: LSHELL | Clone repository
+- name: LSHELL | Clone the repository
   ansible.builtin.git:
     repo: "{{ classyllama_lshell_repo_url }}"
     dest: "/root/lshell-{{ classyllama_lshell_version }}"
     version: "{{ classyllama_lshell_version }} "
 
-- name: LSHELL | Prepare build directory
-  ansible.builtin.file:
-    dest: "{{ classyllama_lshell_build_dir }}"
-    owner: root
-    group: root
-    mode: "750"
-    state: "directory"
+- name: LSHELL | Installation
+  ansible.builtin.command:
+    cmd: python setup.py install --no-compile --install-scripts=/usr/bin/
+  args:
+    chdir: "/root/lshell-{{ classyllama_lshell_version }}"
+
+- name: LSHELL | Add to /etc/shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: /usr/bin/lshell
 
 - name: LSHELL | Upload configuration file
   ansible.builtin.template:
